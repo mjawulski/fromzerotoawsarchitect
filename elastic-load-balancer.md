@@ -47,6 +47,16 @@ There are three types of Load Balancers in AWS
   - Health check made on target group level
   - Instances behind ALB have access to the IP of ALB and can`t see IP of the client directly. If you need to get IP of the client you need to use **X-Forwared-For** header to get IP of the client. (**X-Forwared-Port** for port and **X-Forwared-Proto** for protocol (http/https)) 
 - Network Load Balancer. Can handle TCP, TLS and UPD traffic
+  - Can handle milions of requests per second
+  - Faster, more perfomant than ALB, lower latency (100ms vs 400ms)
+  - Has one static IP per AZ and supports Elastic IP (**note: CLB and ALB has static hostname, not static IP like NLB**)
+  - If you need extreme perfomance or need to handle TCP, TLS or UDP traffix then you need to use Network Load Balancer (NLB)
+
+### Stickiness
+If you want one client to be always redirected to the same EC2 instance you need to use Stickiness.
+works for **CLB and ALB only**. You can use it to keep session data for the client on the server.
+
+### Cross zone load balancing
 
 ### <a name="target-groups">Target Groups</a>
 
