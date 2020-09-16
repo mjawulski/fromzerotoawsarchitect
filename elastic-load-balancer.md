@@ -11,11 +11,11 @@ It can either scale **verticaly** (add more stuff to the machine like increase C
 ### Horizontal scalability
 - increase number of machines
 - common for web servers (www apps)
-- **scale out - add more instance)**
+- **scale out - add more instance**
 - **scale in - remove instances**
 
 
-## High availability
+### High availability
 It means that your application runs in at least 2 different AZs.
 
 We ensure high availability in case any data center goes down.
@@ -57,6 +57,58 @@ If you want one client to be always redirected to the same EC2 instance you need
 works for **CLB and ALB only**. You can use it to keep session data for the client on the server.
 
 ### Cross zone load balancing
+In CLB is disabled by default. No charge if you enable it.
+
+In ALB it is always on. No charges.
+
+In NLB it is disabled by default. If you enable then you pay for it.
+
+### SSL Certs
+- You can encrypt your traffic and use HTTPS. 
+- To do so you can use ACM (AWS Certificate Manager) to create certificate 
+  - or create and upload your own certificate
+- SNI (Server name indication)
+  - If you have multiple websites on one server and they all using certificates then you need to find a way to serve correct certificate. This way is called SNI. It`s a new protocol that returns Certificate based on client request (client sends hostname to connect to). It can also returns a default one. Works only with ALB and NLB **not for CLB**.  
+
+### Conection Draining (a.k.a. Deregistration delay)
+It`s a time to complete existing request while the instance is being deregistered or unhealthy.
+In other words you can set up some time to let request finished before machine is turned off.
+
+## Auto Scaling Groups (ASG)
+- It allows you to automatically scale in (remove instance) or scale out (add instance) to match current load.
+- you can also define a minimum and maximum number of machines running
+- **the whole purpose of having ASG is that if an instance get terminated for whatever reason ASG will recreate it automatically. Which brings us more safety**
+  - They can be terminated if for example Load Balancer mark them as unhealthy (and to make them healty again is sometimes good to terminate it and create a new one)
+
+You need to define three parameters:
+- minimum size: minimum number of instances that will run for sure
+- actual size/desired capacity: number of instances that are currently running
+- maximum size: maximum number of instances that can be run
+
+### Auto Scaling Alarms
+- You can set up policies that will scale up/scale down based on alarms
+- alarms can be actually anything (average cpu, network response time) - they are calculated as average for all instance
+  - you can even set up custom alarms like number of users using applications etc
+  - you can set up them based on schedule (I know that on black monday or every tuesday more users come in)
+
+### Scaling policies
+- Target tracking Scaling
+  - I want average of CPU to stay around some value
+- Simple/Step scaling
+  - If alarm is triggered then add or remove some number of instances
+- Scheduled actions
+  - Add/Remove some numbers of instances every tuesday at 10AM
+
+Scaling cooldown is a period of time after scaling up/down when there can be no additional scaling up/down. It is to helps previous scaling takes effect. You can use it to optimize cost after removing some instances. You can set up a scaling cooldown to concrete policy that overides default cooldown for ASG and let`s say terminate some instances faster.
+
+## Tips for Solution Architects
+What is ASG termination policy?
+1. Choose AZ which has the most number of instances.
+2. Delete that instance which has the oldest configuration
+
+You can leverage lifecycle hooks when ASG creates/terminates new EC2 instance.
+
+You can use it to send logs to some place before instance is being terminated or to do some additonal checks before instance starts.
 
 ### <a name="target-groups">Target Groups</a>
 

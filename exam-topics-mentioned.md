@@ -9,3 +9,5 @@
 - you can customize EC2 instance at boot time using EC2 User Data
 ## Load Balancers  
 - If you need extreme perfomance or need to handle TCP or UDP traffix then you need to use Network Load Balancer (NLB)
+- If you hear multiple certificates think ALB or NLB
+- When you see Launch template vs Launch Configuration you should pick template which is newer version
