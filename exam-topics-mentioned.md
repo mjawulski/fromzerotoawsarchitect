@@ -10,4 +10,10 @@
 ## Load Balancers  
 - If you need extreme perfomance or need to handle TCP or UDP traffix then you need to use Network Load Balancer (NLB)
 - If you hear multiple certificates think ALB or NLB
-- When you see Launch template vs Launch Configuration you should pick template which is newer version
+- When you see Launch template vs Launch Configuration you should pick Launch template which is newer version
+## EBS & EFS
+- EBS Encryption leverages keys from KMS (AES-256)
+- On the exam when you are asked EBS vs Instance store ask yourself Am I okay losing the data (if you are making cache, temp data, buffer then you`re good to choose Instance store)
+- Instance store can have very much IOPS and EBS are limited to 64k IOPS so if there is a question with hundreds or thousands of IOPS choose Instance store
+- EBS volumes can be used in RAID0 to increase performance and RAID1 to increase fault tolerance
+- EFS Works only with Linux (not with Windows)

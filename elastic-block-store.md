@@ -54,3 +54,57 @@ There are 4 types of EBS Volume Types:
 * Can make AMI from Snapshot
 * EBS volumes restored by snapshots need to be pre-warmed
 * Snapshot process can be automated using Amazon Data Lifecycle Manager
+
+## EBS Encryption
+* You can enable encryption in EBS and it will get you:
+  * Encryption of all the data
+  * Snapshot created will also be encrypted
+  * You don`t have to do anything (transparency)
+* Encryption has minimal impact on latency
+* EBS Encryption leverages keys from KMS (AES-256)
+* Copying unencrypted snapshots allows encryption
+* Snapshots of encrypted volumes are encrypted
+
+## Instance store
+* Some instances instead of EBS attached can have something called **Instance Store**
+* It is a drive physically attached to the machine (not a network drive like EBS)
+* Pros:
+  * Better IO performance
+  * Good for buffer/cache/temp content/scratch data
+  * Data survives reboots
+* Cons:
+  * On stop or termination data is lost
+  * **You can`t resize instance store**
+  * Backups are handled by the user not the AWS
+  * On the exam when you are asked EBS vs Instance store ask yourself Am I okay losing the data
+* Instance store can have very much IOPS and EBS are limited to 64k IOPS so if there is a question with hundreds or thousands of IOPS choose Instance store
+
+## EBS RAID
+* RAID 0 (Increase performance) - we can have a very big disk with a lot of IOPS
+  * Combining 2 or more volumes and getting the total disk space and I/O
+  * If one disk fail all the data is failed
+  * Use cases:
+    * Apps that needs a lot of IOPS and doesn`t need fault tolerance
+    * A database that has replication already built in
+  * Individual properties will sum up: 2 disk each with 100GB and 300IOPS will get us 200GB and 600 IOPS in total
+* RAID 1 (Increase fault tolerance) - all the data is replicated through all the disks (mirroring volume to another)
+  * If one disk fails the other is still working
+  * Use cases:
+    * Application that need increase volume fault tolerance
+    * Application where you need to service disks
+    * Individual properties won`t sum up: 2 disk each with 100GB and 300IOPS will get us 100GB and 300 IOPS in total
+
+## EFS (Elastic file system)
+* Managed network file system (NFS) that can be mounted on many EC2
+* EFS works with EC2 instances in multi AZ
+* Highly available, scalable, expensive, pay per use
+* Use cases: content management, web serving, data sharing, wordpress
+* Works only with Linux (not with Windows)
+* Performance and storage clases:
+  * EFS Scale: can handle 1000s of concurent EC2 clients, 10GB+ throughput, can grow to petabytes automatically
+  * Performance mode: 
+    * General Purpose (default): latency-sensitive use cases (web server, CMS, etc)
+    * MAX IO: higher latency, higher throughput, highly paralel (big data, media processing)
+  * Storage tiers:
+    * Standard: for frequently accessed files
+    * Infrequent access (EFS-IA): pay for retreive, pay less for storage
