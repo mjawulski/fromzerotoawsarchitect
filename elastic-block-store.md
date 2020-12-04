@@ -100,7 +100,7 @@ There are 4 types of EBS Volume Types:
 * Highly available, scalable, expensive, pay per use
 * Use cases: content management, web serving, data sharing, wordpress
 * Works only with Linux (not with Windows)
-* Performance and storage clases:
+* Performance and storage classes:
   * EFS Scale: can handle 1000s of concurent EC2 clients, 10GB+ throughput, can grow to petabytes automatically
   * Performance mode: 
     * General Purpose (default): latency-sensitive use cases (web server, CMS, etc)
