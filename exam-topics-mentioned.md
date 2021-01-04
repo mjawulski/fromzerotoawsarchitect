@@ -42,3 +42,6 @@
 
 ## Decoupling
 - anytime you hear decoupling think about Amazon SQS
+- anytime you hear SNS sends messages to SQS Fifo you can rule out that answer - this is not possible
+- anytime you hear big data, realtime, IOT, ETL you should pick Kinesis
+- anytime you hear we are migrating an app from on-prem to cloud and the app is using MQTT or AMQP what should we use? Answer: Amazon MQ
